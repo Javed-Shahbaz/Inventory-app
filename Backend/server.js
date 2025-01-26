@@ -25,7 +25,7 @@ mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`Sever is Running on ${PORT}`);
+      console.log(`Sever is Running on port ${PORT}`);
     });
   })
   .catch((err) => {
