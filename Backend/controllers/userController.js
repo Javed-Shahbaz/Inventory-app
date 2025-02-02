@@ -37,6 +37,15 @@ const registerUser = asyncHandler(async (req, res) => {
   //Generate Token
   const token = generateToken(user._id);
 
+  //send HTTP-Only cookie
+  res.cookie("token", token, {
+    path: "/",
+    httpOnly: true,
+    expiresIn: new Date(Date.now() + 1000 * 86400), // 1 day
+    sameSite: "none",
+    secure: true,
+  });
+
   if (user) {
     const { _id, name, email, photo, phone, bio } = user;
     res.status(201).json({
