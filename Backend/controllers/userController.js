@@ -43,7 +43,7 @@ const registerUser = asyncHandler(async (req, res) => {
   res.cookie("token", token, {
     path: "/",
     httpOnly: true,
-    expiresIn: new Date(Date.now() + 1000 * 86400), // 1 day
+    expires: new Date(Date.now() + 1000 * 86400), // 1 day
     sameSite: "none",
     secure: true,
   });
@@ -79,17 +79,19 @@ const loginUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("User doesn't exist, Please Signup");
   }
-  // Check if password correct or not
+  // User Exists, Check if password correct or not
   const isPasswordCorrect = await bcrypt.compare(password, user.password);
+  //Generate Token
+  const token = generateToken(user._id);
+
   //send HTTP-Only cookie
   res.cookie("token", token, {
-    path: "/login",
+    path: "/",
     httpOnly: true,
-    expiresIn: new Date(Date.now() + 1000 * 86400), // 1 day
+    expires: new Date(Date.now() + 1000 * 86400), // 1 day
     sameSite: "none",
     secure: true,
   });
-
   if (user && isPasswordCorrect) {
     const { _id, name, email, photo, phone, bio } = user;
     res.status(200).json({
@@ -99,6 +101,7 @@ const loginUser = asyncHandler(async (req, res) => {
       photo,
       phone,
       bio,
+      token,
     });
   } else {
     res.status(400);
