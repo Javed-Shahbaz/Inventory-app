@@ -9,29 +9,43 @@ const cookieParser = require("cookie-parser");
 
 const app = express();
 
-//Middlewares
+// Middlewares
+app.use(cors());
 app.use(express.json());
-app.use(cookieParser);
+app.use(cookieParser());
 app.use(bodyParser.json());
 
-//Routes Middleware
+// Routes Middleware
 app.use("/api/users", userRoute);
 
-// Routes
+// Home Page Route
 app.get("/", (req, res) => {
-  res.send("Home Page");
+  res.send("Welcome to the Home Page");
 });
-//Error Middleware
+
+// Login Page Route
+app.get("/login", (req, res) => {
+  res.send("Login Page");
+});
+
+// Register User Route
+app.get("/register", (req, res) => {
+  res.send("Register Page");
+});
+
+// Error Middleware
 app.use(errorHandler);
+
 const PORT = process.env.PORT || 3000;
-// Connecting to MongoDb database
+
+// Connecting to MongoDB database
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`Sever is Running on port ${PORT} \nConnected to MongoDB`);
+      console.log(`Server is Running on port ${PORT} \nConnected to MongoDB`);
     });
   })
   .catch((err) => {
-    console.log("Sever Error", err.message);
+    console.log("Server Error", err.message);
   });
