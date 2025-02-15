@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const userRoute = require("./routes/userRoute");
-const errorHandler = require("./middleWare/errorMiddleware");
+const errorHandler = require("./models/errorMiddleware");
 const cookieParser = require("cookie-parser");
 
 const app = express();
