@@ -91,8 +91,9 @@ const loginUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     expires: new Date(Date.now() + 1000 * 24 * 60 * 60), // 1 day
     sameSite: "none",
-    secure: true,
+    secure: false,
   });
+
   if (user && isPasswordCorrect) {
     const { _id, name, email, photo, phone, bio } = user;
     res.status(200).json({
@@ -124,32 +125,44 @@ const logoutUser = asyncHandler(async (req, res) => {
   return res.status(200).json({ message: "Successfully Logged out" });
 });
 
-// Getting User Data
 const getUser = asyncHandler(async (req, res) => {
+  // Fetch user from database
   const user = await User.findById(req.body.id);
 
-  if (user) {
-    const { _id, name, email, photo, phone, bio } = user;
-    return res.status(200).json({ _id, name, email, photo, phone, bio });
+  // If user is not found, return an error
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
   }
 
-  res.status(400);
-  throw new Error("User not found");
+  // Generate Token
+  const token = generateToken(user._id);
+
+  // Send HTTP-Only Cookie (Check if it's being set properly)
+  res.cookie("token", token, {
+    path: "/getuser",
+    httpOnly: true,
+    expires: new Date(Date.now() + 1000 * 24 * 60 * 60), // 1 day
+    sameSite: "none",
+    secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+  });
+
+  // Return user data
+  const { _id, name, email, photo, phone, bio } = user;
+  res.status(200).json({ _id, name, email, photo, phone, bio });
 });
 
 // Getting LoggedIn Status
 const loginStatus = asyncHandler(async (req, res) => {
   const token = req.cookies.token;
+
+  // Log token value for debugging
+  console.log("Token received:", token);
+
   if (!token) {
-    return res.json(false);
+    return res.status(401).json({ message: "Not Logged In" });
   }
-  // Verify token
-  const verified = jwt.verify(token, process.env.JWT_KEY);
-  if (verified) {
-    return res.json(true);
-  } else {
-    return res.json(false);
-  }
-  res.send("User LoggedIn");
+
+  res.status(200).json({ message: "User is Logged In", token });
 });
+
 module.exports = { registerUser, loginUser, logoutUser, getUser, loginStatus };

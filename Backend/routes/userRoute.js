@@ -4,7 +4,7 @@ const {
   logoutUser,
   getUser,
   loginStatus,
-} = require("../controllers/userController");
+} = require("../controllers/userController.js");
 
 const express = require("express");
 const protect = require("../middleWare/authMiddleware.js");

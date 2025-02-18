@@ -10,7 +10,12 @@ const cookieParser = require("cookie-parser");
 const app = express();
 
 // Middlewares
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Your frontend URL
+    credentials: true, // Allows sending cookies
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.json());
