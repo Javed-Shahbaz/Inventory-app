@@ -165,4 +165,15 @@ const loginStatus = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "User is Logged In", token });
 });
 
-module.exports = { registerUser, loginUser, logoutUser, getUser, loginStatus };
+// Update User
+const updateUser = asyncHandler(async (req, res) => {
+  res.send("User updated Successfully");
+});
+module.exports = {
+  registerUser,
+  loginUser,
+  logoutUser,
+  getUser,
+  loginStatus,
+  updateUser,
+};
