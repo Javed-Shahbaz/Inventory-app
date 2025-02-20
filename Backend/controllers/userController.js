@@ -127,7 +127,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 
 const getUser = asyncHandler(async (req, res) => {
   // Fetch user from database
-  const user = await User.findById(req.body.id);
+  const user = await User.findById(req.user._id);
 
   // If user is not found, return an error
   if (!user) {
