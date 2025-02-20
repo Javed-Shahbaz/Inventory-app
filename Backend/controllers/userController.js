@@ -193,7 +193,7 @@ const updateUser = asyncHandler(async (req, res) => {
 
 // Change User Password
 const changePassword = asyncHandler(async (req, res) => {
-  req.send("Password Changed");
+  res.send("Password Changed");
 });
 module.exports = {
   registerUser,
@@ -202,5 +202,5 @@ module.exports = {
   getUser,
   loginStatus,
   updateUser,
-  changePassword
+  changePassword,
 };
