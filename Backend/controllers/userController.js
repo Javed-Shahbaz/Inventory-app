@@ -190,6 +190,11 @@ const updateUser = asyncHandler(async (req, res) => {
     throw new Error("User not Found");
   }
 });
+
+// Change User Password
+const changePassword = asyncHandler(async (req, res) => {
+  req.send("Password Changed");
+});
 module.exports = {
   registerUser,
   loginUser,
@@ -197,4 +202,5 @@ module.exports = {
   getUser,
   loginStatus,
   updateUser,
+  changePassword
 };
