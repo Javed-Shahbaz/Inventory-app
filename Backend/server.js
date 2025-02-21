@@ -9,16 +9,11 @@ const cookieParser = require("cookie-parser");
 
 const app = express();
 
-// Middlewares
-app.use(
-  cors({
-    origin: "http://localhost:3000", // Your frontend URL
-    credentials: true, // Allows sending cookies
-  })
-);
-app.use(express.json());
-app.use(cookieParser());
-app.use(bodyParser.json());
+// Middleware (ORDER MATTERS!)
+app.use(cors({ origin: "http://localhost:3000", credentials: true })); // If using frontend
+app.use(express.json()); // Enables JSON parsing
+app.use(express.urlencoded({ extended: true })); // Enables URL-encoded form data parsing
+app.use(cookieParser()); // Parses cookies
 
 // Routes Middleware
 app.use("/api/users", userRoute);
@@ -37,7 +32,18 @@ app.get("/login", (req, res) => {
 app.get("/register", (req, res) => {
   res.send("Register Page");
 });
-
+// Get User Data Route
+app.get("/getuser", (req, res) => {
+  res.send("Get User Page");
+});
+// Update User Route
+app.get("/update", (req, res) => {
+  res.send("Update User Page");
+});
+// Register User Route
+app.get("/changePassword", (req, res) => {
+  res.send("Change Password Page");
+});
 // Error Middleware
 app.use(errorHandler);
 
