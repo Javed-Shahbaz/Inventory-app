@@ -217,6 +217,7 @@ const changePassword = asyncHandler(async (req, res) => {
     throw new Error("Old password is incorrect");
   }
 });
+
 module.exports = {
   registerUser,
   loginUser,
