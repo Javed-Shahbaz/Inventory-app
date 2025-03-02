@@ -3,6 +3,7 @@ const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const Token = require("../models/tokenModel");
+const crypto = require("crypto");
 
 // Generating Token for Authentication
 const generateToken = (id) => {
