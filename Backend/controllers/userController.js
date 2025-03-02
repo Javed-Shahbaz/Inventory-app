@@ -228,7 +228,20 @@ const forgotPassword = asyncHandler(async (req, res) => {
   }
   // Create reset token
   let resetToken = crypto.randomBytes(32).toString("hex") + user._id;
-  console.log(resetToken);
+  // Hash Token before saving into DB
+  const hashToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  //Save Token to DB
+  await new Token({
+    userId: user._id,
+    token: hashToken,
+    createdAt: Date.now(),
+    expiresAt: Date.now() + 30 * 60 * 1000, //add 30 minute token validity
+  }).save();
+  //Construct Reset URL
+  
   res.send("Forgot Password");
 });
 module.exports = {
